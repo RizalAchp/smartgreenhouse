@@ -5,6 +5,11 @@ from typing import (
 )
 
 class LiquidCrystal_I2C:
+    """LiquidCrystal_I2C.
+
+    DEPRECATED! memperngaruhi kestabilan input dan output pada arduino
+    """
+
     LCD_CLEARDISPLAY = 0x01
     LCD_RETURNHOME = 0x02
     LCD_ENTRYMODESET = 0x04
@@ -53,9 +58,28 @@ class LiquidCrystal_I2C:
     _oled: bool = True
 
     def write(self, value: int):
+        """write.
+
+        :param value:
+        :type value: int
+        """
         self.send(value, self.REGISTER_SELECT_BIT)
 
     def __init__(self, address: int, column: int, row: int, board: telemetrix.Telemetrix, dotsize: int = 1) -> None:
+        """__init__.
+
+        :param address:
+        :type address: int
+        :param column:
+        :type column: int
+        :param row:
+        :type row: int
+        :param board:
+        :type board: telemetrix.Telemetrix
+        :param dotsize:
+        :type dotsize: int
+        :rtype: None
+        """
         self.address: int = address
         self.column: int = column
         self.row: int = row
@@ -67,6 +91,16 @@ class LiquidCrystal_I2C:
         self.begin(self.column, self.row, dotsize=dotsize)
 
     def begin(self, column: int, lines: int, dotsize: int = LCD_5x8DOTS) -> None:
+        """begin.
+
+        :param column:
+        :type column: int
+        :param lines:
+        :type lines: int
+        :param dotsize:
+        :type dotsize: int
+        :rtype: None
+        """
         self.board.set_pin_mode_i2c()
 
         if lines >= 1:
@@ -106,92 +140,192 @@ class LiquidCrystal_I2C:
         self.home()
 
     def clear(self):
+        """clear."""
         self.command(self.LCD_CLEARDISPLAY)
         sleep(0.002)
         if self._oled:
             self.set_cursor(0, 0)
 
     def home(self) -> None:
+        """home.
+
+        :rtype: None
+        """
         self.command(self.LCD_RETURNHOME)
         sleep(0.002)
 
     def set_cursor(self, column: int, row: int) -> None:
+        """set_cursor.
+
+        :param column:
+        :type column: int
+        :param row:
+        :type row: int
+        :rtype: None
+        """
         row_offsets = [0x00, 0x40, 0x14, 0x54]
         if row > self._numlines:
             row = self._numlines - 1
         self.command(self.LCD_SETDDRAMADDR | (column + row_offsets[row]))
 
     def disable_display(self) -> None:
+        """disable_display.
+
+        :rtype: None
+        """
         self._display_control = self._display_control & ~self.LCD_DISPLAYON
         self.command(self.LCD_DISPLAYON | self._display_control)
 
     def enable_display(self) -> None:
+        """enable_display.
+
+        :rtype: None
+        """
         self._display_control = self._display_control | self.LCD_DISPLAYON
         self.command(self.LCD_DISPLAYCONTROL | self._display_control)
 
     def disable_cursor(self) -> None:
+        """disable_cursor.
+
+        :rtype: None
+        """
         self._display_control = self._display_control & ~self.LCD_CURSORON
         self.command(self.LCD_DISPLAYCONTROL | self._display_control)
 
     def enable_cursor(self) -> None:
+        """enable_cursor.
+
+        :rtype: None
+        """
         self._display_control = self._display_control | self.LCD_CURSORON
         self.command(self.LCD_DISPLAYCONTROL | self._display_control)
 
     def disable_blink(self) -> None:
+        """disable_blink.
+
+        :rtype: None
+        """
         self._display_control = self._display_control & ~self.LCD_BLINKON
         self.command(self.LCD_DISPLAYCONTROL | self._display_control)
 
     def enable_blink(self) -> None:
+        """enable_blink.
+
+        :rtype: None
+        """
         self._display_control = self._display_control | self.LCD_BLINKON
         self.command(self.LCD_DISPLAYCONTROL | self._display_control)
 
     def scroll_display_left(self) -> None:
+        """scroll_display_left.
+
+        :rtype: None
+        """
         self.command(self.LCD_CURSORSHIFT | self.LCD_DISPLAYMOVE | self.LCD_MOVELEFT)
 
     def scroll_display_right(self) -> None:
+        """scroll_display_right.
+
+        :rtype: None
+        """
         self.command(self.LCD_CURSORSHIFT | self.LCD_DISPLAYMOVE | self.LCD_MOVERIGHT)
 
     def left_to_right(self) -> None:
+        """left_to_right.
+
+        :rtype: None
+        """
         self._display_mode = self._display_mode | self.LCD_ENTRYLEFT
         self.command(self.LCD_ENTRYMODESET | self._display_mode)
 
     def right_to_left(self) -> None:
+        """right_to_left.
+
+        :rtype: None
+        """
         self._display_mode = self._display_mode & ~self.LCD_ENTRYLEFT
         self.command(self.LCD_ENTRYMODESET | self._display_mode)
 
     def enable_auto_scroll(self) -> None:
+        """enable_auto_scroll.
+
+        :rtype: None
+        """
         self._display_mode = self._display_mode | self.LCD_ENTRYSHIFTINCREMENT
         self.command(self.LCD_ENTRYMODESET | self._display_mode)
 
     def disable_auto_scroll(self) -> None:
+        """disable_auto_scroll.
+
+        :rtype: None
+        """
         self._display_mode = self._display_mode & ~self.LCD_ENTRYSHIFTINCREMENT
         self.command(self.LCD_ENTRYMODESET | self._display_mode)
 
     def disable_backlight(self) -> None:
+        """disable_backlight.
+
+        :rtype: None
+        """
         self._backlight_value = self.LCD_NOBACKLIGHT
         self.expander_write(0)
 
     def enable_backlight(self) -> None:
+        """enable_backlight.
+
+        :rtype: None
+        """
         self._backlight_value = self.LCD_BACKLIGHT
         self.expander_write(0)
 
     def command(self, value) -> None:
+        """command.
+
+        :param value:
+        :rtype: None
+        """
         self.send(value, 0)
 
     def send(self, value: int, mode: int) -> None:
+        """send.
+
+        :param value:
+        :type value: int
+        :param mode:
+        :type mode: int
+        :rtype: None
+        """
         high_nibble: int = value & 0xf0
         low_nibble: int = (value << 4) & 0xf0
         self.write_4_bits(high_nibble | mode)
         self.write_4_bits(low_nibble | mode)
 
     def write_4_bits(self, value: int) -> None:
+        """write_4_bits.
+
+        :param value:
+        :type value: int
+        :rtype: None
+        """
         self.expander_write(value)
         self.pulse_enable(value)
 
     def expander_write(self, data: int) -> None:
+        """expander_write.
+
+        :param data:
+        :type data: int
+        :rtype: None
+        """
         self.board.i2c_write(self.address, [data, self._backlight_value])
 
     def pulse_enable(self, data: int) -> None:
+        """pulse_enable.
+
+        :param data:
+        :type data: int
+        :rtype: None
+        """
         self.expander_write(data | self.ENABLE_BIT)
         sleep(0.000001)
 
@@ -199,9 +333,24 @@ class LiquidCrystal_I2C:
         sleep(0.00005)
 
     def print(self, string: AnyStr) -> None:
+        """print.
+
+        :param string:
+        :type string: AnyStr
+        :rtype: None
+        """
         for character in string:
             self.write(ord(str(character)))
             sleep(0.000001)
         else:
             sleep(0.00005)
 
+
+if __name__ == "__main__":
+    # testing
+    board = telemetrix.Telemetrix()
+    lcd = LiquidCrystal_I2C(0x3F,0,1,board)
+    lcd.enable_backlight()
+    lcd.begin(16,2)
+    lcd.set_cursor(0,0)
+    lcd.print("HAI PRODI TKK")

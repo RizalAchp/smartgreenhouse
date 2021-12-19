@@ -1,12 +1,15 @@
 import deps
 import sys
 
-mainfun = deps.mainFunctions
-myboard = deps.board
+end_database = deps.end_query
+main_fun = deps.mainFunctions
+my_board = deps.board
 calls = deps.callbacks
+
 if __name__ == "__main__":
     try:
-        mainfun(myboard,calls)
+        main_fun(my_board,calls)
     except KeyboardInterrupt:
-        myboard.shutdown()
+        my_board.shutdown()
+        end_database()
         sys.exit()

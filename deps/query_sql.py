@@ -1,5 +1,5 @@
 from mysql.connector import MySQLConnection, Error
-from greenhos.mysql_dbconfig import read_db_config
+from deps.mysql_dbconfig import read_db_config
 
 def end_query():
     """end_query."""

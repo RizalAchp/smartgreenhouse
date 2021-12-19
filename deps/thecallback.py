@@ -1,57 +1,126 @@
 class TheCallback:
-    """TheCallback."""
+    """TheCallback.
+    :list a: data appending dht dari list data yang didapatkan callback
+    :list b: data appending soil sensor dari list data yang diapatkan callback
+    :list c: data appending hcsr sensor dari list data yang didapatkan callback
+    :list d: data appending ldr sensor dari list data yang diapatkan callback
+    :list e: data appending potensio dari list data yang didapatkan callback
+    :list f: data appending potensio2 dari list data yang didapatkan callback
+    :list r1: data appending relay1 dari list data yang didapatkan callback
+    :list r2: data appending relay2 dari list data yang didapatkan callback
+    :list r3: data appending relay3 dari list data yang didapatkan callback
+    :list r4: data appending relay4 dari list data yang didapatkan callback
+    """
+    _a = []
+    _b = []
+    _c = []
+    _d = []
+    _r1 = []
+    _r2 = []
+    _r3 = []
+    _r4 = []
 
-    a = []
-    b = []
-    c = []
-    d = []
-    def dhtcallback(self,a):
+
+    def dht_callback(self,a):
         """dhtcallback.
 
-        :param a:
+        :param a: return data dari input dht
         """
-        self.a.clear()
-        self.a.append(a[4])
-        self.a.append(a[5])
-        return self.a
+        self._a.clear()
+        self._a.append(a[4])
+        self._a.append(a[5])
+        return self._a
 
-    def soilcallback(self,b):
+    def soil_callback(self, b):
         """soilcallback.
 
-        :param b:
+        :param b: return data dari input soilsensor
         """
-        self.b.clear()
-        self.b.append(b[2])
-        self.b.append(b[3])
-        return self.b
+        self._b.clear()
+        self._b.append(b[2])
+        self._b.append(b[3])
+        return self._b
 
-    def hcsrcallback(self,c):
+    def hcsr_callback(self,c):
         """hcsrcallback.
 
-        :param c:
+        :param c: return data dari input hcsr
         """
-        self.c.clear()
-        self.c.append(c[2])
-        # self.c.append(c[3])
-        return self.c
+        self._c.clear()
+        self._c.append(c[2])
+        # self._c.append(c[3])
+        return self._c
 
-    def ldrcallback(self,d):
+    def ldr_callback(self,d):
         """ldrcallback.
 
-        :param d:
+        :param d: return data dari input ldr
         """
-        self.d.clear()
-        self.d.append(d[2])
-        self.d.append(d[3])
-        return self.d
+        self._d.clear()
+        self._d.append(d[2])
+        self._d.append(d[3])
+        return self._d
 
+    def rel1_callback(self,e):
+        """rel1_callback.
+
+        :param e:
+        """
+        self._r1.clear()
+        self._r1.append(int(e[0]*100))
+        return self._r1
+
+    def rel2_callback(self,e):
+        """rel2_callback.
+
+        :param e:
+        """
+        self._r2.clear()
+        self._r2.append(int(e[0]*100))
+        return self._r2
+
+    def rel3_callback(self,e):
+        """rel3_callback.
+
+        :param e:
+        """
+        self._r3.clear()
+        self._r3.append(int(e[0]*100))
+        return self._r3
+
+    def rel4_callback(self,e):
+        """rel4_callback.
+
+        :param e:
+        """
+        self._r4.clear()
+        self._r4.append(int(e[0]*100))
+        return self._r4
+
+    # def pot1_callback(self,e):
+    #     """ldrcallback.
+
+    #     :param d: return data dari input potensio satu
+    #     """
+    #     self._e.clear()
+    #     self._e.append(e[2])
+    #     return self._e
+
+    # def pot2_callback(self,f):
+    #     """ldrcallback.
+
+    #     :param d: return data dari input potensio dua
+    #     """
+    #     self.f.clear()
+    #     self.f.append(f[2])
+    #     return self.f
 
 def fun_test():
     """fun_test."""
     callback = TheCallback()
-    calldht = callback.dhtcallback
+    calldht = callback.dht_callback
     for i,j in zip(range(0,10),range(0,10)):
-        a = callback.a
+        a = callback._a
         calldht([i,j])
 
         print(a[0])
