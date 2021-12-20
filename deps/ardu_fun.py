@@ -1,6 +1,6 @@
 from telemetrix import telemetrix
 from deps.thecallback import TheCallback
-from deps.query_sql import *
+# from deps.query_sql import *
 from deps.termdashboard import *
 import time
 
@@ -40,6 +40,12 @@ def mainFunctions(board:telemetrix.Telemetrix ,calls:TheCallback,loop:int=10000)
     board.set_pin_mode_digital_output(rel2)
     board.set_pin_mode_digital_output(rel3)
     board.set_pin_mode_digital_output(rel4)
+    call_rel1([0])
+    call_rel2([0])
+    call_rel3([0])
+    call_rel4([0])
+
+    time.sleep(1.0)
     a = calls._a     # data callback dht
     b = calls._b     # data callback soil
     c = calls._c     # data callback hcsr
@@ -49,9 +55,9 @@ def mainFunctions(board:telemetrix.Telemetrix ,calls:TheCallback,loop:int=10000)
     r3 = calls._r3     # data callback relay3
     r4 = calls._r4     # data callback relay4
 
-    _chart_soil = b[0]/100
-    _chart_hcsrs = c[0]
-    _chart_ldr = d[0]/100
+    _chart_soil = b[0]/10
+    _chart_hcsrs = c[0]/2
+    _chart_ldr = d[0]/10
 # access a tile by index
     _chart_log = ui.items[0].items[0]
     _chart_humadity = ui.items[1].items[0]
@@ -69,50 +75,51 @@ def mainFunctions(board:telemetrix.Telemetrix ,calls:TheCallback,loop:int=10000)
         perkondisian relay pada ketentuan suhu
         maupun kelembapan udara dari dht sensor
         """
-        if a[0] < 70.0:
+        if a[0] < 80.0: # HUMADITY
             board.digital_write(rel1,1)
-            call_rel1(1)
-            if a[1] > 33.0:
+            call_rel1([1])
+            if a[1] >= 25.0: # SUHU
             # print(f'rel1 and rel2 hidup')
                 board.digital_write(rel2,1)
-                call_rel2(1)
+                call_rel2([1])
             else:
                 board.digital_write(rel2,0)
-                call_rel2(0)
+                call_rel2([0])
 
         else:
             # print(f'rel1 and rel2 mati')
             board.digital_write(rel1,0)
-            call_rel1(0)
+            call_rel1([0])
 
         '''
         perkondisian relay pada pada tingkat kebasahan tanah
         dari bacaan `SoilMoistureSensor`
         '''
-        if b[0] < 900:
+        if b[0] < 800:
             # print(f'rel4 hidup')
             board.digital_write(rel4,1)
-            call_rel4(1)
+            call_rel4([1])
 
         else:
             # print(f'rel4 mati')
             board.digital_write(rel4,0)
-            call_rel4(0)
+            call_rel4([0])
+
         """
         perkondisian relay dan led sebagai indikator ketinggian air pada tanki
         """
         if c[0] > 120:
             board.digital_write(rel3,1)
-            call_rel3(1)
+            call_rel3([1])
 
         else:
             board.digital_write(rel3,0)
-            call_rel3(0)
+            call_rel3([0])
 
 
         ui.items[1].items[2].items[0].value = float(_chart_soil)
         ui.items[1].items[2].items[1].value = float(_chart_ldr)
-        ui.items[0].item[2].value = float(_chart_hcsrs)
+        ui.items[0].items[2].value = float(_chart_hcsrs)
 
         _chart_relays[0].value =r1[0]
         _chart_relays[1].value =r2[0]
@@ -122,7 +129,7 @@ def mainFunctions(board:telemetrix.Telemetrix ,calls:TheCallback,loop:int=10000)
         _chart_log.append(f'humidity = {str(a[0])} suhu = {str(a[1])}')
         _chart_log.append(f'soilsensor = {str(b[0])}')
         _chart_log.append(f'ldr = {str(d[0])}')
-        _chart_log.append(f'hcsr = {str()}')
+        _chart_log.append(f'hcsr = {str(_chart_hcsrs)}')
 
         _chart_humadity.append(a[0])
         _chart_suhu.append(a[1])

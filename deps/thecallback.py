@@ -1,3 +1,5 @@
+
+
 class TheCallback:
     """TheCallback.
     :list a: data appending dht dari list data yang didapatkan callback
@@ -38,7 +40,6 @@ class TheCallback:
         """
         self._b.clear()
         self._b.append(b[2])
-        self._b.append(b[3])
         return self._b
 
     def hcsr_callback(self,c):
@@ -58,7 +59,6 @@ class TheCallback:
         """
         self._d.clear()
         self._d.append(d[2])
-        self._d.append(d[3])
         return self._d
 
     def rel1_callback(self,e):
@@ -67,7 +67,7 @@ class TheCallback:
         :param e:
         """
         self._r1.clear()
-        self._r1.append(int(e[0]*100))
+        self._r1.append(e[0]*100.0)
         return self._r1
 
     def rel2_callback(self,e):
@@ -76,7 +76,7 @@ class TheCallback:
         :param e:
         """
         self._r2.clear()
-        self._r2.append(int(e[0]*100))
+        self._r2.append(e[0]*100.0)
         return self._r2
 
     def rel3_callback(self,e):
@@ -85,7 +85,7 @@ class TheCallback:
         :param e:
         """
         self._r3.clear()
-        self._r3.append(int(e[0]*100))
+        self._r3.append(e[0]*100.0)
         return self._r3
 
     def rel4_callback(self,e):
@@ -94,7 +94,7 @@ class TheCallback:
         :param e:
         """
         self._r4.clear()
-        self._r4.append(int(e[0]*100))
+        self._r4.append(e[0]*100.0)
         return self._r4
 
     # def pot1_callback(self,e):
