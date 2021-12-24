@@ -71,5 +71,5 @@ for x in range(1,1000):
     humadity.append(i)
     suhu.append(i)
     ui.display()
-    time.sleep(5.0)
+    time.sleep(1.0)
     x+=1

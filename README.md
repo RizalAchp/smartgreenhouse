@@ -24,8 +24,11 @@ _oleh:_
 
 1. **vim** _( text editor )_
 2. **python3** _( bahasa pemrograman yang di pakai )_
-3. **Telemetrix** _( module python3 sebagai intrepeter ke arduino
-   sama seperti pyfirmata namun fitur lebih banyk )_
+
+   - **Telemetrix** _( module python3 sebagai intrepeter ke arduino
+     sama seperti pyfirmata namun fitur lebih banyk )_
+   - **dashing** _( module python untuk menampilkan / menvisualisasikan data dalam bentuk gauge
+     maupun numerik didalam terminal emulator )_
 
 ## proses yang dilakukan
 
@@ -38,7 +41,7 @@ _oleh:_
 4. memrogram full dengn python
 5. menvisualisasikan data kedalam TUI ( Terminal User Interface )\
    ~~data value yang didapatkan di simpan didalam database ( mysql )~~\
-   ~~memvisualisasikan kedalam web server maupun mobile app~~ ( future )
+   <!--TODOO --> ~~memvisualisasikan kedalam web server maupun mobile app~~ ( future )
 
 ## kelebihan
 

@@ -21,6 +21,7 @@ class TheCallback:
     _r2 = []
     _r3 = []
     _r4 = []
+    _rels = []
 
 
     def dht_callback(self,a):
@@ -95,6 +96,18 @@ class TheCallback:
         """
         self._r4.clear()
         self._r4.append(e[0]*100.0)
+        return self._r4
+
+    def rels_callback(self,rels):
+        """rel4_callback.
+
+        :param e:
+        """
+        self._rels.clear()
+        self._rels.append(rels[0]*100.0)
+        self._rels.append(rels[1]*100.0)
+        self._rels.append(rels[2]*100.0)
+        self._rels.append(rels[3]*100.0)
         return self._r4
 
     # def pot1_callback(self,e):

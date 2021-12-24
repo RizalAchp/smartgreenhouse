@@ -1,15 +1,13 @@
-import deps
-import sys
-
-# end_database = deps.end_query
-main_fun = deps.mainFunctions
-my_board = deps.board
-calls = deps.callbacks
+#!/usr/bin/env python3
+from deps import MainFunction, my_board, my_calls,\
+    my_loop, my_time, my_kondisi, ui
+import sys as s
 
 if __name__ == "__main__":
     try:
-        main_fun(my_board,calls)
+        MainFunction(board=my_board, call=my_calls, ui=ui,
+                     loops=my_loop, delay=my_time, konds=my_kondisi)
     except KeyboardInterrupt:
         my_board.shutdown()
         # end_database()
-        sys.exit()
+        s.exit()
