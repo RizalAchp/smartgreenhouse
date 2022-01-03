@@ -1,12 +1,19 @@
 from configparser import ConfigParser
 
 class Config:
-    _file       = 'config.ini'
-    _time       = 'TIMING'
-    _val_time   = 'timer'
-    _loop       = 'LOOP'
-    _val_loop   = 'banyak_loop'
-    _kondisi    = 'PERKONDISIAN SENSOR'
+    _file           = 'config.ini'
+    _time           = 'TIMING'
+    _val_time       = 'timer'
+    _loop           = 'LOOP'
+    _val_loop       = 'banyak_loop'
+    _kondisi        = 'PERKONDISIAN_SENSOR_TEST'
+    kondisi_float   = ['on_temp_dht', 'off_temp_dht',
+                       'on_humadity_dht', 'off_humadity_dht'
+                       ]
+    kondisi_int     = ['on_moisture_soil','off_moisture_soil',
+                       'jarak_hcsr1','jarak_hcsr2','jarak_hcsr3','jarak_hcsr4']
+
+    kondisi = []
     def __init__(self) -> None:
         self.parser = ConfigParser()
         self.parser.read(self._file)
@@ -21,13 +28,16 @@ class Config:
 
         return int(self._loop)
 
-    def read_config_kondisi(self)->list:
+    def read_config_kondisi(self):
         kond = self.parser[self._kondisi]
+        self.kondisi.append(0)
+        for dht in self.kondisi_float:
+            self.kondisi.append(kond.getfloat(dht))
 
-        return [
-            kond['kond_temp_dht'], kond['kond_humadity_dht'],
-            kond['kond_moisture_soil'], kond['kond_jarak_hcsr']
-        ]
+        for ints in self.kondisi_int:
+            self.kondisi.append(kond.getint(ints))
+
+        return self.kondisi
 
 if __name__ == "__main__":
     conf = Config()
@@ -37,3 +47,5 @@ if __name__ == "__main__":
 
     print(f'time={time} loop={loop} kondisi= {kondisi}')
     print(f'tipe time={type(time)} tile loop={type(loop)} tipe kondisi= {type(kondisi)}')
+    if kondisi[1] == 32.0:
+        print(True)

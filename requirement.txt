@@ -1,5 +1,3 @@
 dashing==0.1.0
 mysql-connector-python==8.0.27
-pyright==0.0.13
-pyserial==3.5
 telemetrix==1.8

@@ -1,4 +1,5 @@
 import time
+from .datasensor import TheCallback
 
 
 class MainFunction:
@@ -17,8 +18,9 @@ class MainFunction:
     REL2 = 3
     REL3 = 4
     REL4 = 5
+    LED = [13, 12, 8, 7, 6]
 
-    def __init__(self, board,call, ui, loops=int, delay=float, konds=list):
+    def __init__(self, board,call:TheCallback, ui, loops=int, delay=float, konds=list):
         """__init__.
 
         :param board:
@@ -27,7 +29,7 @@ class MainFunction:
         :type call: `TheCallback` class dari bacaan sensor
         :param ui:
         :type ui: tupple items dari `dashing` sebagai visualisasi data
-        :param loops:
+        :param loo1s:
         :type loops: jumlah banyaknya loop yang berjalan
         :param delay:
         :type delay: delay yang dibutuhkan setiap loop data
@@ -57,6 +59,11 @@ class MainFunction:
         self.board.set_pin_mode_digital_output(self.REL2)
         self.board.set_pin_mode_digital_output(self.REL3)
         self.board.set_pin_mode_digital_output(self.REL4)
+        self.board.set_pin_mode_digital_output(self.LED[0])
+        self.board.set_pin_mode_digital_output(self.LED[1])
+        self.board.set_pin_mode_digital_output(self.LED[2])
+        self.board.set_pin_mode_digital_output(self.LED[3])
+        self.board.set_pin_mode_digital_output(self.LED[4])
         self.call.rel1_callback([0])
         self.call.rel2_callback([0])
         self.call.rel3_callback([0])
@@ -91,26 +98,43 @@ class MainFunction:
 
             # perkondisian relay pada ketentuan suhu
             # maupun kelembapan udara dari dht sensor
-            if self.a[0] < kond[1]:  # humadity
+
+            if self.a[0] <= kond[3]:  # humadity
                 self.board.digital_write(self.REL1, 1)
                 self.call.rel1_callback([1])
 
-                if self.a[1] >= kond[0]:  # suhu
-                    # print(f'rel1 and rel2 hidup')
-                    self.board.digital_write(self.REL2, 1)
-                    self.call.rel1_callback([1])
-                else:
-                    self.board.digital_write(self.REL2, 0)
-                    self.call.rel2_callback([1])
+            elif self.a[0] <= kond[4]:
+                self.board.digital_write(self.REL1, 1)
+                self.call.rel1_callback([1])
 
             else:
                 # print(f'rel1 and rel2 mati')
                 self.board.digital_write(self.REL1, 0)
-                self.call.rel1_callback([1])
+                self.call.rel1_callback([0])
+
+
+            if self.a[1] >= kond[2]:  # suhu
+                # print(f'rel1 and rel2 hidup')
+                self.board.digital_write(self.REL2, 1)
+                self.call.rel2_callback([1])
+
+            elif self.a[1] >= kond[1]:
+                self.board.digital_write(self.REL2, 1)
+                self.call.rel2_callback([1])
+
+            else:
+                self.board.digital_write(self.REL2, 0)
+                self.call.rel2_callback([0])
+
 
             # perkondisian relay pada pada tingkat kebasahan tanah
             # dari bacaan `soilmoisturesensor`
-            if self.b[0] < kond[2]:
+            if self.b[0] >= kond[6]:
+                # print(f'rel4 hidup')
+                self.board.digital_write(self.REL4, 1)
+                self.call.rel4_callback([1])
+
+            elif self.b[0] >= kond[5]:
                 # print(f'rel4 hidup')
                 self.board.digital_write(self.REL4, 1)
                 self.call.rel4_callback([1])
@@ -118,15 +142,54 @@ class MainFunction:
             else:
                 # print(f'rel4 mati')
                 self.board.digital_write(self.REL4, 0)
-                self.call.rel4_callback([1])
+                self.call.rel4_callback([0])
 
             # perkondisian relay dan led sebagai
             # indikator ketinggian air pada tanki
-            if self.c[0] > kond[3]:
+            if self.c[0] >= kond[7]:
                 self.board.digital_write(self.REL3, 1)
+                self.board.digital_write(self.LED[0] , 1)
+                self.board.digital_write(self.LED[1] , 0)
+                self.board.digital_write(self.LED[2] , 0)
+                self.board.digital_write(self.LED[3] , 0)
+                self.board.digital_write(self.LED[4] , 0)
+                self.call.rel3_callback([1])
+
+            elif self.c[0] >= kond[8]:
+                self.board.digital_write(self.REL3, 1)
+                self.board.digital_write(self.LED[0] , 1)
+                self.board.digital_write(self.LED[1] , 1)
+                self.board.digital_write(self.LED[2] , 0)
+                self.board.digital_write(self.LED[3] , 0)
+                self.board.digital_write(self.LED[4] , 0)
+                self.call.rel3_callback([1])
+
+            elif self.c[0] >= kond[9]:
+                self.board.digital_write(self.REL3, 1)
+                self.board.digital_write(self.LED[0] , 1)
+                self.board.digital_write(self.LED[1] , 1)
+                self.board.digital_write(self.LED[2] , 1)
+                self.board.digital_write(self.LED[3] , 0)
+                self.board.digital_write(self.LED[4] , 0)
+                self.call.rel3_callback([1])
+
+            elif self.c[0] >= kond[10]:
+                self.board.digital_write(self.REL3, 1)
+                self.board.digital_write(self.LED[0] , 1)
+                self.board.digital_write(self.LED[1] , 1)
+                self.board.digital_write(self.LED[2] , 1)
+                self.board.digital_write(self.LED[3] , 1)
+                self.board.digital_write(self.LED[4] , 0)
+                self.call.rel3_callback([1])
 
             else:
                 self.board.digital_write(self.REL3, 0)
+                self.board.digital_write(self.LED[0] , 1)
+                self.board.digital_write(self.LED[1] , 1)
+                self.board.digital_write(self.LED[2] , 1)
+                self.board.digital_write(self.LED[3] , 1)
+                self.board.digital_write(self.LED[4] , 1)
+                self.call.rel3_callback([0])
 
             # UI DASHBOARD TERMINAL ELEMENT DAN DATA
             self.ui.items[1].items[2].items[0].value = float(self.b[0]/10)
@@ -138,10 +201,10 @@ class MainFunction:
             self._chart_relays[2].value = self.r3[0]
             self._chart_relays[3].value = self.r4[0]
 
-            self._chart_log.append(f'humidity = {str(self.a[0])}\
-                                   suhu = {str(self.a[1])} *c')
+            self._chart_log.append(f'humidity = {str(self.a[0])} %')
+            self._chart_log.append(f'Suhu= {str(self.a[1])} \u2103')
             self._chart_log.append(f'SOILsensor = {str(self.b[0])}')
-            self._chart_log.append(f'LDR = {str(self.d[0])}')
+            self._chart_log.append(f'LDR = {str(self.d[0]/10)}')
             self._chart_log.append(f'hcsr = {str(self.c)} cm')
 
             self._chart_humadity.append(self.a[0])

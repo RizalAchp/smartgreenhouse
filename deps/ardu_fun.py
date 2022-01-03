@@ -1,7 +1,7 @@
 import time
 from telemetrix import telemetrix
-from deps.termdashboard import ui
-from deps.thecallback import TheCallback
+from .dashboard import ui
+from .datasensor import TheCallback
 
 # from deps.query_sql import *
 # from deps.liquidcrystal import *
@@ -130,20 +130,12 @@ def main_functions(board: telemetrix.Telemetrix, calls: TheCallback, loop: int)-
         _chart_suhu.append(a[1])
         ui.display()
         loops += 1
-
-        # print(f'\npoll dht: humidity={a[0]} suhu={a[1]} \
-        #         \ndata bacaan SOIL mosture sensor={b[0]} \
-        #         \npoll pin hcsr={c[0]} \
-        #         \npin LDR={d[0]} \n\n')
-        # print(f'tipe data dht={type(a[0])}')
-
         # except KeyboardInterrupt:
         #     board.shutdown()
         #     sys.exit()
 
 
 # DEFINE PIN ARDUINO
-
 # Analog
 SOIL = 0
 LDR = 1
@@ -159,5 +151,3 @@ REL1 = 2
 REL2 = 3
 REL3 = 4
 REL4 = 5
-# led         = [13,12,10,9,8,7,6] # < mengganggu kestablilan koneksi
-# arr_digital = [2,3,4,5,6,7,8,9,10,12,13]

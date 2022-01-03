@@ -11,6 +11,7 @@ void setup() {
     Serial.println("*============================*");
  
     Cari_Alamat();
+    Serial.
 }
  
 void loop() { }

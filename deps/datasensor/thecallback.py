@@ -21,8 +21,6 @@ class TheCallback:
     _r2 = []
     _r3 = []
     _r4 = []
-    _rels = []
-
 
     def dht_callback(self,a):
         """dhtcallback.
@@ -62,53 +60,42 @@ class TheCallback:
         self._d.append(d[2])
         return self._d
 
-    def rel1_callback(self,e):
+    def rel1_callback(self,r1):
         """rel1_callback.
 
         :param e:
         """
         self._r1.clear()
-        self._r1.append(e[0]*100.0)
+        self._r1.append(r1[0]*100.0)
         return self._r1
 
-    def rel2_callback(self,e):
+    def rel2_callback(self,r2):
         """rel2_callback.
 
         :param e:
         """
         self._r2.clear()
-        self._r2.append(e[0]*100.0)
+        self._r2.append(r2[0]*100.0)
         return self._r2
 
-    def rel3_callback(self,e):
+    def rel3_callback(self,r3):
         """rel3_callback.
 
         :param e:
         """
         self._r3.clear()
-        self._r3.append(e[0]*100.0)
+        self._r3.append(r3[0]*100.0)
         return self._r3
 
-    def rel4_callback(self,e):
+    def rel4_callback(self,r4):
         """rel4_callback.
 
         :param e:
         """
         self._r4.clear()
-        self._r4.append(e[0]*100.0)
+        self._r4.append(r4[0]*100.0)
         return self._r4
 
-    def rels_callback(self,rels):
-        """rel4_callback.
-
-        :param e:
-        """
-        self._rels.clear()
-        self._rels.append(rels[0]*100.0)
-        self._rels.append(rels[1]*100.0)
-        self._rels.append(rels[2]*100.0)
-        self._rels.append(rels[3]*100.0)
-        return self._r4
 
     # def pot1_callback(self,e):
     #     """ldrcallback.
