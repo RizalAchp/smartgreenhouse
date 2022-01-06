@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from deps import my_function, my_board, my_calls,\
+from source import my_function, my_board, my_calls,\
     my_loop, my_time, my_kondisi, my_ui #, database 
 
 import sys
