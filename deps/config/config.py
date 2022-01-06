@@ -6,12 +6,14 @@ class Config:
     _val_time       = 'timer'
     _loop           = 'LOOP'
     _val_loop       = 'banyak_loop'
-    _kondisi        = 'PERKONDISIAN_SENSOR_TEST'
+    _kondisi        = 'PERKONDISIAN_SENSOR'
     kondisi_float   = ['on_temp_dht', 'off_temp_dht',
                        'on_humadity_dht', 'off_humadity_dht'
                        ]
     kondisi_int     = ['on_moisture_soil','off_moisture_soil',
-                       'jarak_hcsr1','jarak_hcsr2','jarak_hcsr3','jarak_hcsr4']
+                       'jarak_hcsr1','jarak_hcsr2',
+                       'jarak_hcsr3','jarak_hcsr4'
+                       ]
 
     kondisi = []
     def __init__(self) -> None:
@@ -39,6 +41,8 @@ class Config:
 
         return self.kondisi
 
+
+# testing saja.
 if __name__ == "__main__":
     conf = Config()
     time = Config.read_config_time(conf)

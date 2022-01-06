@@ -1,10 +1,12 @@
-from dashing.dashing import VGauge,HSplit,Text,Log,ColorRangeVGauge,VSplit,HChart,HGauge
+from dashing.dashing import VGauge,HSplit,Text,Log,ColorRangeVGauge,\
+    VSplit,HChart,HGauge
 
 ui = VSplit(
         HSplit(
             Log(title="log data",border_color=3,color=3),
             VSplit(
-                Text("KELOMPOK MATAKULIAH WORKSHOP SISTEM TERTANAM",color=1,border_color=1),
+                Text("KELOMPOK MATAKULIAH WORKSHOP SISTEM TERTANAM",
+                     color=1,border_color=1),
                 HSplit(
                     VGauge(title="relay1", val=0, border_color=2, color=2),
                     VGauge(title="relay2", val=0, border_color=2, color=2),

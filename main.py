@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from deps import my_function, my_board, my_calls,\
-    my_loop, my_time, my_kondisi, my_ui
+    my_loop, my_time, my_kondisi, my_ui #, database 
+
 import sys
-# from deps import database
+
+#TODO!! buat Cronjob pada program ini
 
 if __name__ == "__main__":
     try:

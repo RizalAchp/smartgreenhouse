@@ -1,6 +1,6 @@
 import time
+from telemetrix import telemetrix
 from .datasensor import TheCallback
-
 
 class MainFunction:
     """MainFunction.
@@ -20,7 +20,7 @@ class MainFunction:
     REL4 = 5
     LED = [13, 12, 8, 7, 6]
 
-    def __init__(self, board,call:TheCallback, ui, loops=int, delay=float, konds=list):
+    def __init__(self, board:telemetrix.Telemetrix, call:TheCallback, ui, loops=int, delay=float, konds=list):
         """__init__.
 
         :param board:
@@ -34,7 +34,8 @@ class MainFunction:
         :param delay:
         :type delay: delay yang dibutuhkan setiap loop data
         :param konds:
-        :type konds: list kondisi dari configparser file `config.ini` pada parrent directory
+        :type konds: list kondisi dari configparser file `config.ini` 
+            pada parrent directory
         """
         self.board = board
         self.call = call
