@@ -1,9 +1,12 @@
-# SMART GREENHOUSE WITH ARDUINO AND TELEMETRIX
-
-Automisasi pada greenhouse berupa pengukuran dan pengontrol suhu, kelembapan udara, kelembapan tanah, sirkulasi udara, serta besar cahaya pada environment yang di tentukan
+<h1 id="JUDUL">
+    SMART GREENHOUSE WITH ARDUINO AND TELEMETRIX
+</h1>
+<h4>
+    Automisasi pada greenhouse berupa pengukuran dan pengontrol suhu, kelembapan udara, kelembapan tanah, sirkulasi udara, serta besar cahaya pada environment yang di tentukan
+</h4>
 
 _oleh:_  
-**[Rizal Achmad Pahlevi `E32201406`](https://github.com/RizalAchp)**
+**[TIM TREESAKTI : TKK POLIJE](https://github.com/RizalAchp)**
 
 ## alat dan bahan
 
@@ -20,7 +23,44 @@ _oleh:_
     <!-- 11. **12c LCD 16x2** _( lcd sebagai indikator tambahan )_ -->
     <!-- 12. **LED array** _( led sebagai indikator tambahan )_ -->
 
-## sofware yang digunakan
+<h2 id="cara-menjalankan">
+    cara menjalankan
+</h2>
+
+1. download repo ini secara manual atau clone menggunakan git
+
+   ```bash
+   git clone --recursive https://github.com/RizalAchp/smartgreenhouse.git
+   cd ./smartgreenhouse
+   ```
+
+2. install dependensi
+
+   ```bash
+   pip install -r ./requirement.txt
+   ```
+
+3. buka arduino IDE, dan download Library `Telemetrix4Arduino` pada library manager dan upload Example dari library tersebut pada `Arduino Uno / Nano` minimal yang menggunakan `ATMEGA328` sebagai microcontrollernya.
+
+4. setelah itu kembali pada directory `smartgreenhouse`, dan jalankan program dengan cara:
+
+   ```bash
+   python ./main.py
+   ```
+
+   atau jika anda berada pada linux:
+
+   ```bash
+   python3 ./main.py
+   ```
+
+5. Selesai
+
+**untuk definisi pin yang digunakan bisa dihilhat di [DI SINI](#DEFINISI-PIN)**
+
+<h2 id="software-yang-digunakan">
+    sofware yang digunakan
+</h2>
 
 1. **vim** _( text editor )_
 2. **python3** _( bahasa pemrograman yang di pakai )_
@@ -30,41 +70,51 @@ _oleh:_
    - **dashing** _( module python untuk menampilkan / menvisualisasikan data dalam bentuk gauge
      maupun numerik didalam terminal emulator )_
 
-## proses yang dilakukan
+<h2 id="proses yang dilakukan">
+   proses yang dilakukan
+</h2>
 
-1. membuat wadah semua module kedalam acrilic untuk mempermudah dan meminimalisir tempat maupun kerapian dalam module
+3. membuat wadah semua module kedalam acrilic untuk mempermudah dan meminimalisir tempat maupun kerapian dalam module
 
-2. menggunakan regulator sebagai pengatur daya agar distribusi daya stabil
+4. menggunakan regulator sebagai pengatur daya agar distribusi daya stabil
 
-3. module sensor dapat di tambah maupun di ubah dengan module sensor lain selama pin yang dibutuhkan sama
+5. module sensor dapat di tambah maupun di ubah dengan module sensor lain selama pin yang dibutuhkan sama
 
-4. memrogram full dengn python
-5. menvisualisasikan data kedalam TUI ( Terminal User Interface )\
+6. memrogram full dengn python
+7. menvisualisasikan data kedalam TUI ( Terminal User Interface )\
    ~~data value yang didapatkan di simpan didalam database ( mysql )~~\
    <!--TODOO --> ~~memvisualisasikan kedalam web server maupun mobile app~~ ( future )
 
-## kelebihan
+<h2 id="kelebihan">
+    Kelebihan
+</h2>
 
 1. minimalis
 2. full di program dengan python yang dapat mumudahkan mendeploy dan menjalankan program pada raspberry pi
 3. karena data di simpan didalam daabase, memudahkan kita untuk memvisualisasikan kedalam pengaplikasiann kedepannya
 
-## Definisi Pin yang digunakan pada arduino
+<h2 id="DEFINISI-PIN">
+    Definisi Pin yang digunakan pada arduino
+</h2>
 
-- PIN ANALOG =
+- **PIN ANALOG =**
 
-  1. A0 = sensor soil moisture
-  2. A1 = sensor ldr\
-     ~~A4 = 12c LCD (sda)~~\
-     ~~A5 = 12c LCD (scl)~~
+  | ALAT                 |   PIN    |
+  | -------------------- | :------: |
+  | Sensor Soil Moisture | Analog 0 |
+  | Sensor LDR           | Analog 1 |
+  | i2c LCD (SDA)        | Analog 4 |
+  | i2c LCD (SCL)        | Analog 5 |
 
-- PIN DIGITAL =
+- **PIN DIGITAL =**
 
-  1. sensor dht = 11
-  2. Trig Pin HCSR = 9
-  3. Echo Pin HCSR = 10\
-  4. relay 1 = 2
-  5. relay 2 = 3
-  6. relay 3 = 4
-  7. relay 4 = 5\
-     ~~LED = 13,12,10,9,8,7,6~~
+  | ALAT             |           PIN            |
+  | ---------------- | :----------------------: |
+  | Sensor DHT11     |        Digital 11        |
+  | Trig pin HCSR-04 |        Digital 9         |
+  | Echo Pin HCSR-04 |        Digital 10        |
+  | Relay            |        Digital 2         |
+  | Relay            |        Digital 3         |
+  | Relay            |        Digital 4         |
+  | Relay            |        Digital 5         |
+  | LED              | Digital 13,12,10,9,8,7,6 |
