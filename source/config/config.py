@@ -1,7 +1,6 @@
 from configparser import ConfigParser
 
-class Config:
-    _file           = 'config.ini'
+class Config(ConfigParser):
     _time           = 'TIMING'
     _val_time       = 'timer'
     _loop           = 'LOOP'
@@ -16,22 +15,25 @@ class Config:
                        ]
 
     kondisi = []
-    def __init__(self) -> None:
-        self.parser = ConfigParser()
-        self.parser.read(self._file)
+    # def __init__(self) -> None:
+    #     self.parser = ConfigParser()
+    #     self.parser.read(self._file)
+    def __init__(self,file, *args, **kwargs):
+        ConfigParser.__init__(self, *args, **kwargs)
+        self.read(file)
 
     def read_config_time(self)->float:
-        self._time = self.parser[self._time][self._val_time]
+        self._time = self[self._time][self._val_time]
 
         return float(self._time)
 
     def read_config_loop(self)->int:
-        self._loop = self.parser[self._loop][self._val_loop]
+        self._loop = self[self._loop][self._val_loop]
 
         return int(self._loop)
 
     def read_config_kondisi(self):
-        kond = self.parser[self._kondisi]
+        kond = self[self._kondisi]
         self.kondisi.append(0)
         for dht in self.kondisi_float:
             self.kondisi.append(kond.getfloat(dht))
@@ -44,7 +46,7 @@ class Config:
 
 # testing saja.
 if __name__ == "__main__":
-    conf = Config()
+    conf = Config('config.ini')
     time = Config.read_config_time(conf)
     loop = Config.read_config_loop(conf)
     kondisi = Config.read_config_kondisi(conf)

@@ -5,7 +5,7 @@ ui = VSplit(
         HSplit(
             Log(title="log data",border_color=3,color=3),
             VSplit(
-                Text("KELOMPOK MATAKULIAH WORKSHOP SISTEM TERTANAM",
+                Text("TIM TREESAKTI - TKK POLIJE",
                      color=1,border_color=1),
                 HSplit(
                     VGauge(title="relay1", val=0, border_color=2, color=2),
