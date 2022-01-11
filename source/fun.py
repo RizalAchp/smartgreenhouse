@@ -1,5 +1,6 @@
 import time
 import sys
+from typing import Optional
 from rich.console import Console
 from telemetrix.telemetrix import Telemetrix
 from .datasensor import TheCallback
@@ -18,7 +19,7 @@ class MainFunction:
     LED = [13, 12, 8, 7, 6]
     list_rel_led = [2, 3, 4, 5, 6, 7, 8, 12, 13]
 
-    def __init__(self, loops=int, delay=float, kondisi=list):
+    def __init__(self, delay= float, kondisi= dict):
         """__init__.
 
         :param board:
@@ -38,7 +39,6 @@ class MainFunction:
         self.console = Console()
         self.call = TheCallback()
         self.ui = ui
-        self.loop = loops
         self.delay = delay
         self.kond = kondisi
 
@@ -81,21 +81,21 @@ class MainFunction:
                     if ((time.time() - self.start_time) >= self.delay):
                         # perkondisian relay pada ketentuan suhu
                         # maupun kelembapan udara dari dht sensor
-                        if self.call._a[0] <= self.kond[3]:  # humadity
+                        if self.call.data['humid'] <= self.kond['humadity_hi']:  # humadity
                             self.board.digital_write(self.REL1, 1)
                             self.call.rel1_callback([1])
-                        elif self.call._a[0] <= self.kond[4]:
+                        elif self.call.data['humid'] <= self.kond['humadity_lo']:
                             self.board.digital_write(self.REL1, 1)
                             self.call.rel1_callback([1])
                         else: # print(f'rel1 and rel2 mati')
                             self.board.digital_write(self.REL1, 0)
                             self.call.rel1_callback([0])
 
-                        if self.call._a[1] >= self.kond[2]:  # suhu
+                        if self.call.data['temp'] >= self.kond['temp_lo']:  # suhu
                             # print(f'rel1 and rel2 hidup')
                             self.board.digital_write(self.REL2, 1)
                             self.call.rel2_callback([1])
-                        elif self.call._a[1] >= self.kond[1]:
+                        elif self.call.data['temp'] >= self.kond['temp_hi']:
                             self.board.digital_write(self.REL2, 1)
                             self.call.rel2_callback([1])
                         else:
@@ -104,11 +104,11 @@ class MainFunction:
 
                         # perkondisian relay pada pada tingkat kebasahan tanah
                         # dari bacaan `soilmoisturesensor`
-                        if self.call._b[0] >= self.kond[6]:
+                        if self.call.data['soil'] >= self.kond['moisture_lo']:
                             # print(f'rel4 hidup')
                             self.board.digital_write(self.REL4, 1)
                             self.call.rel4_callback([1])
-                        elif self.call._b[0] >= self.kond[5]:
+                        elif self.call.data['soil'] >= self.kond['moisture_hi']:
                             # print(f'rel4 hidup')
                             self.board.digital_write(self.REL4, 1)
                             self.call.rel4_callback([1])
@@ -118,19 +118,19 @@ class MainFunction:
 
                         # perkondisian relay dan led sebagai
                         # indikator ketinggian air pada tanki
-                        if self.call._c[0] >= self.kond[7]:
+                        if self.call.data['hcsr'] >= self.kond['water_low']:
                             self.board.digital_write(self.REL3, 1)
                             self.led_fun(1,0,0,0,0)
                             self.call.rel3_callback([1])
-                        elif self.call._c[0] >= self.kond[8]:
+                        elif self.call.data['hcsr'] >= self.kond['water_lowmed']:
                             self.board.digital_write(self.REL3, 1)
                             self.led_fun(1,1,0,0,0)
                             self.call.rel3_callback([1])
-                        elif self.call._c[0] >= self.kond[9]:
+                        elif self.call.data['hcsr'] >= self.kond['water_med']:
                             self.board.digital_write(self.REL3, 1)
                             self.led_fun(1,1,1,0,0)
                             self.call.rel3_callback([1])
-                        elif self.call._c[0] >= self.kond[10]:
+                        elif self.call.data['hcsr'] >= self.kond['water_hi']:
                             self.board.digital_write(self.REL3, 1)
                             self.led_fun(1,1,1,1,0)
                             self.call.rel3_callback([1])
@@ -138,21 +138,15 @@ class MainFunction:
                             self.board.digital_write(self.REL3, 0)
                             self.led_fun(1,1,1,1,1)
                             self.call.rel3_callback([0])
-
                         # UI DASHBOARD TERMINAL ELEMENT DAN DATA
                         self.update_ui()
-
                         self.start_time = time.time()
 
                 except IndexError:
                     continue
-
         # jika error exit
         except (KeyboardInterrupt, RuntimeError, KeyError):
-            self.exit(1)
-
-
-
+            self.exit(True)
 
     def led_fun(self, led1=None, led2=None, led3=None, led4=None, led5=None):
         """[led_fun]
@@ -161,16 +155,34 @@ class MainFunction:
         """
         _led_state = {'led1': led1, 'led2': led2, 'led3': led3,
                       'led4': led4, 'led5': led5 }
-
         for p, i in zip(self.LED , _led_state):
-            if _led_state[i]:
+            if _led_state[i] == 1:
                 self.board.digital_write(p, 1)
             else:
                 self.board.digital_write(p, 0)
 
-        return
+    def update_ui(self):
+        self.ui.items[1].items[2].items[0].value = float(self.call.data['soil']/10)
+        self.ui.items[1].items[2].items[1].value = float(self.call.data['hcsr']/2)
+        self.ui.items[0].items[2].value = float(self.call.data['ldr']/10)
 
-    def exit(self, errors:None):
+        self.ui.items[0].items[1].items[-1].items[0].value = self.call.data['relay1']
+        self.ui.items[0].items[1].items[-1].items[1].value = self.call.data['relay2']
+        self.ui.items[0].items[1].items[-1].items[2].value = self.call.data['relay3']
+        self.ui.items[0].items[1].items[-1].items[3].value = self.call.data['relay4']
+
+        self.ui.items[0].items[0].append(f'humidity = {str(self.call.data["humid"])} %')
+        self.ui.items[0].items[0].append(f'Suhu= {str(self.call.data["temp"])} \u2103')
+        self.ui.items[0].items[0].append(f'SOILsensor = {str(self.call.data["soil"])}')
+        self.ui.items[0].items[0].append(f'LDR = {str(self.call.data["ldr"]/10)}')
+        self.ui.items[0].items[0].append(f'hcsr = {str(self.call.data["hcsr"])} cm')
+
+        self.ui.items[1].items[0].append(self.call.data['humid'])
+        self.ui.items[1].items[1].append(self.call.data['temp'])
+        self.ui.display()
+        self.ui
+
+    def exit(self, errors: Optional[bool] = None):
         if errors:
             self.console.print_exception()
             return self.console.log('\nPROGRAM GAGAL UNTUK MENYAMUNGKAN PADA ARDUINO atau ARDUINO TIDAK TERHUBUNG!\
@@ -178,24 +190,3 @@ class MainFunction:
         else:
             self.board.shutdown()
             sys.exit('PROGRAM DITUTUP')
-
-    def update_ui(self):
-        self.ui.items[1].items[2].items[0].value = float(self.call._b[0]/10)
-        self.ui.items[1].items[2].items[1].value = float(self.call._c[0]/2)
-        self.ui.items[0].items[2].value = float(self.call._d[0]/10)
-
-        self.ui.items[0].items[1].items[-1].items[0].value = self.call._r1[0]
-        self.ui.items[0].items[1].items[-1].items[1].value = self.call._r2[0]
-        self.ui.items[0].items[1].items[-1].items[2].value = self.call._r3[0]
-        self.ui.items[0].items[1].items[-1].items[3].value = self.call._r4[0]
-
-        self.ui.items[0].items[0].append(f'humidity = {str(self.call._a[0])} %')
-        self.ui.items[0].items[0].append(f'Suhu= {str(self.call._a[1])} \u2103')
-        self.ui.items[0].items[0].append(f'SOILsensor = {str(self.call._b[0])}')
-        self.ui.items[0].items[0].append(f'LDR = {str(self.call._d[0]/10)}')
-        self.ui.items[0].items[0].append(f'hcsr = {str(self.call._c)} cm')
-
-        self.ui.items[1].items[0].append(self.call._a[0])
-        self.ui.items[1].items[1].append(self.call._a[1])
-        self.ui.display()
-        self.ui

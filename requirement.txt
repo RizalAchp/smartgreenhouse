@@ -1,3 +1,4 @@
 dashing==0.1.0
 mysql-connector-python==8.0.27
 telemetrix==1.8
+rich==10.16.1

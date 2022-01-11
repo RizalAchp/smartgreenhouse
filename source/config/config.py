@@ -1,47 +1,39 @@
 from configparser import ConfigParser
 
 class Config(ConfigParser):
-    _time           = 'TIMING'
-    _val_time       = 'timer'
-    _loop           = 'LOOP'
-    _val_loop       = 'banyak_loop'
+    _config         = {'time':'TIMING', 'val_time':'timer',
+                       'loop':'LOOP', 'val_loop':'banyak_loop'}
     _kondisi        = 'PERKONDISIAN_SENSOR'
-    kondisi_float   = ['on_temp_dht', 'off_temp_dht',
-                       'on_humadity_dht', 'off_humadity_dht'
-                       ]
-    kondisi_int     = ['on_moisture_soil','off_moisture_soil',
-                       'jarak_hcsr1','jarak_hcsr2',
-                       'jarak_hcsr3','jarak_hcsr4'
-                       ]
-
-    kondisi = []
+    kondisi_float   = {'temp_hi': 0.0, 'temp_lo': 0.0,
+                       'humadity_hi': 0.0, 'humadity_lo': 0.0
+                       }
+    kondisi_int     = {'moisture_hi': 0.0, 'moisture_lo': 0.0,
+                       'water_low': 0.0, 'water_lowmed': 0.0,
+                       'water_med': 0.0, 'water_hi': 0.0
+                       }
     # def __init__(self) -> None:
     #     self.parser = ConfigParser()
     #     self.parser.read(self._file)
-    def __init__(self,file, *args, **kwargs):
+    def __init__(self, file, *args, **kwargs):
         ConfigParser.__init__(self, *args, **kwargs)
         self.read(file)
 
     def read_config_time(self)->float:
-        self._time = self[self._time][self._val_time]
-
-        return float(self._time)
+        return float(self[self._config['time']][self._config['val_time']])
 
     def read_config_loop(self)->int:
-        self._loop = self[self._loop][self._val_loop]
-
-        return int(self._loop)
+        return int(self[self._config['loop']][self._config['val_loop']])
 
     def read_config_kondisi(self):
         kond = self[self._kondisi]
-        self.kondisi.append(0)
         for dht in self.kondisi_float:
-            self.kondisi.append(kond.getfloat(dht))
+            self.kondisi_float[dht] = (kond.getfloat(dht))
 
         for ints in self.kondisi_int:
-            self.kondisi.append(kond.getint(ints))
+            self.kondisi_int[ints] = (kond.getint(ints))
 
-        return self.kondisi
+        return self.kondisi_float | self.kondisi_int
+
 
 
 # testing saja.
@@ -53,5 +45,6 @@ if __name__ == "__main__":
 
     print(f'time={time} loop={loop} kondisi= {kondisi}')
     print(f'tipe time={type(time)} tile loop={type(loop)} tipe kondisi= {type(kondisi)}')
-    if kondisi[1] == 32.0:
-        print(True)
+    for i in kondisi:
+        print(f'value in list = {kondisi[i]}, type in list = {type(kondisi[i])}')
+    print(kondisi['temp_hi'] == 32.0)
