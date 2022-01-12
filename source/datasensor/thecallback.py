@@ -43,25 +43,25 @@ class TheCallback:
         """rel1_callback.
         :param e:
         """
-        self.data['relay1'] = r1[0]*100.0
+        self.data['relay1'] = r1[0]/0.01
 
     def rel2_callback(self,r2):
         """rel2_callback.
         :param e:
         """
-        self.data['relay2'] = r2[0]*100.0
+        self.data['relay2'] = r2[0]/0.01
 
     def rel3_callback(self,r3):
         """rel3_callback.
         :param e:
         """
-        self.data['relay3'] = r3[0]*100.0
+        self.data['relay3'] = r3[0]/0.01
 
     def rel4_callback(self,r4):
         """rel4_callback.
         :param e:
         """
-        self.data['relay4'] = r4[0]*100.0
+        self.data['relay4'] = r4[0]/0.01
 
 
 if __name__ == "__main__":
